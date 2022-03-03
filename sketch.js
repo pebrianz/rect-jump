@@ -52,7 +52,9 @@ function draw() {
     pipes[i].draw();
     pipes[i].update();
     if(pipes[i].offscreen()) {
+      //r remove the pipe from world
       pipes[i].remove();
+      // remove the pipe from the array
       pipes.splice(i, 1);
     }
   }

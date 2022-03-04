@@ -1,10 +1,10 @@
 // module aliases
 var Engine = Matter.Engine,
-    Render = Matter.Render,
     Runner = Matter.Runner,
     Bodies = Matter.Bodies,
-    Body = Matter.Body,
-    Composite = Matter.Composite;
+    Composite = Matter.Composite,
+    Body = Matter.Body;
+
 
 var engine, runner;
 
@@ -14,19 +14,25 @@ var wallTop, wallBottom, pipeTop, pipeBottom;
 
 // set speed of game ans space of pipes
 var speed = 3;
-    space = 100;
+    space = 150;
 
 var pipes = [];
+
 
 function setup() {
   createCanvas(displayWidth, displayHeight/1.3);
   // create an engine
   engine = Engine.create();
-
+  // set frameRate
+  frameRate(60);
+  // create player
   player = new Player(width/2, height/2, 40, 40);
+  // create wallTop 
   wallTop = new Wall(width/2, 0, width, 20);
+  // create wallBottom 
   wallBottom = new Wall(width/2, height, width, 20);
-  pipes.push(pipeTop = new Pipe(width, 10, 50, random(0, height-100)));
+  // create pipes
+  pipes.push(new Pipe(width, 10, 50, random(0, height-100)));
   // create runner
   runner = Runner.create();
   // run the engine
@@ -34,28 +40,34 @@ function setup() {
 }
 
 function mouseClicked() {
-  player.jump()
+  player.jump();
 }
 
 function draw() {
+  // set background color
   background(50);
-  wallTop.draw();
-  wallBottom.draw();
+  // draw player
   player.draw();
+  // draw wallTop
+  wallTop.draw();
+  // draw wallBottom
+  wallBottom.draw();
+  // if player out of screen, reset player position
   if(player.offscreen()) {
     player.reset();
   }
+  // if frameCount % 120 == 0, create new pipe
   if(frameCount % 120 == 0) {
     pipes.push(new Pipe(width, 10, 50, random(0, height-100)));
   }
-  for(var i = 0; i < pipes.length; i++) {
+  // draw pipes
+  for(let i = 0; i < pipes.length; i++) {
     pipes[i].draw();
+    // update the pipe position
     pipes[i].update();
+    // if pipe out of screen, remove it
     if(pipes[i].offscreen()) {
-      //r remove the pipe from world
       pipes[i].remove();
-      // remove the pipe from the array
-      pipes.splice(i, 1);
     }
   }
 }
